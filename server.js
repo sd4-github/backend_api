@@ -1,3 +1,4 @@
+const PORT= process.env.PORT||3200;
 const express=require('express');
 const app=express();
 const path=require('path');
@@ -115,8 +116,8 @@ app.use(cors());
             const connected= await mongoose.connect(dbUrl, { useNewUrlParser: true });
 
             if (connected ) {
-                app.listen(3200, ()=>{
-                    console.log("server is running on PORT:", 3200);
+                app.listen(PORT, ()=>{
+                    console.log("server is running on PORT:", PORT);
                 })
             }
         } catch (err) {
