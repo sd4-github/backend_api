@@ -76,15 +76,25 @@ exports.showCart = (req, res, next) => {
     CartModel.find({ user_id: user_id })
         .then(showcartresult => {
             console.log(showcartresult);
-            res.render('user/cart', {
-                prod: showcartresult,
-                pageTitle: 'cart',
-                path: '/addtocart',
-                data: req.session.userData
+            // res.render('user/cart', {
+            //     prod: showcartresult,
+            //     pageTitle: 'cart',
+            //     path: '/addtocart',
+            //     data: req.session.userData
+            // })
+            res.status(200).json({
+                success: true,
+                message: "cart details",
+                data: showcartresult,
+                sessiondata: req.session.userData
             })
         })
         .catch(err => {
             console.log(err);
+            res.status(400).json({
+                success: false,
+                message: "cart fetch unsuccessfull!"
+            })
         })
 
 }
@@ -113,12 +123,21 @@ exports.addToCart = (req, res, next) => {
                     const Cart = new CartModel({ user_id: user_id, p_id: p_id, quantity: quantity, pname: pname, pvalue: pvalue, pimage: pimage })
 
                     Cart.save()
-                        .then(updateResult => {
+                        .then(addCartResult => {
                             console.log('product added to cart!')
-                            res.redirect('/addtocart');
+                            res.status(200).json({
+                                success: true,
+                                message: "product added to cart!",
+                                data: addCartResult,
+                                sessiondata: req.session.userData
+                            })
                         })
                         .catch(err => {
                             console.log(err);
+                            res.status(400).json({
+                                success: false,
+                                message: "cart add unsuccessfull!"
+                            })
                         })
                     // }
                     // else{
@@ -139,12 +158,20 @@ exports.addToCart = (req, res, next) => {
                 })
 
                 .catch(err => {
-                    console.log(err)
+                    console.log(err);
+                    res.status(400).json({
+                        success: false,
+                        message: "cart add unsuccessfull!"
+                    })
                 })
 
         })
         .catch(err => {
             console.log(err);
+            res.status(400).json({
+                success: false,
+                message: "cart add unsuccessfull!"
+            })
         })
 }
 
@@ -164,15 +191,28 @@ exports.updateCart = (req, res, next) => {
 
             cartproduct.save()
                 .then(updateResult => {
-                    console.log('product updated to cart!')
-                    res.redirect('/addtocart');
+                    console.log('product updated to cart!');
+                    res.status(200).json({
+                        success: true,
+                        message: "cart updated!",
+                        data: updateResult,
+                        sessiondata: req.session.userData
+                    })
                 })
                 .catch(err => {
                     console.log(err);
+                    res.status(400).json({
+                        success: false,
+                        message: "cart update unsuccessfull!"
+                    })
                 })
         })
         .catch(err => {
-            console.log(err)
+            console.log(err);
+            res.status(400).json({
+                success: false,
+                message: "cart update unsuccessfull!"
+            })
         })
 }
 
@@ -204,16 +244,19 @@ exports.getCheckout = (req, res, next) => {
     CartModel.find({ user_id: user_id })
         .then(cartItem => {
             console.log('cartitems', cartItem);
-            res.render('user/checkout', {
-                prod: cartItem,
-                pageTitle: 'checkout',
-                path: '/getcheckout',
-                data: req.session.userData
-
-            });
+            res.status(200).json({
+                success: true,
+                message: "cartitems!",
+                data: cartItem,
+                sessiondata: req.session.userData
+            })
         })
         .catch(err => {
             console.log(err);
+            res.status(400).json({
+                success: false,
+                message: "checkout unsuccessfull!"
+            })
         });
 
 }
@@ -231,8 +274,7 @@ exports.postCheckout = (req, res, next) => {
             let total = 0;
             if (cartproduct[cartproduct.length - 1]) {
 
-                for (var i = 0; i < cartproduct.length; i++) {
-                    
+                for (var i = 0; i < cartproduct.length; i++) {                
                     let p = cartproduct[i].pvalue;
                     console.log(p);
                     let quan = cartproduct[i].quantity;
@@ -244,28 +286,46 @@ exports.postCheckout = (req, res, next) => {
                 const orderData = new OrderModel({ name: name, email: email, mobilenum: mobilenum, address: address, user_id: user_id, total: total, orderproduct: cartproduct })
                 orderData.save()
                     .then(saveResult => {
-                        console.log('order succesfull!', saveResult);
+                        console.log('order succesfull!', saveResult);  
+                        res.status(200).json({
+                            success: true,
+                            message: "order succesfull!",
+                            data: saveResult,
+                            sessiondata: req.session.userData
+                        })                    
                     })
                     .then(deleteResult => {
                         CartModel.deleteMany({ user_id: user_id })
 
                             .then(postDeleteResult => {
-                                console.log('cart clear!', postDeleteResult),
-                                    res.redirect('/order');
+                                console.log('cart clear!', postDeleteResult)
+                                    // res.redirect('/order');
                             })
                             .catch(err => {
                                 console.log(err);
+                                res.status(400).json({
+                                    success: false,
+                                    message: "order unsuccessfull!"
+                                })
                             })
 
                     })
                     .catch(err => {
                         console.log(err);
+                        res.status(400).json({
+                            success: false,
+                            message: "order unsuccessfull!"
+                        })
                     })
             }
 
         })
         .catch(err => {
             console.log(err);
+            res.status(400).json({
+                success: false,
+                message: "order unsuccessfull!"
+            })
         })
 }
 
@@ -276,16 +336,19 @@ exports.order = (req, res, next) => {
     OrderModel.find({ user_id: user_id })
         .then(orderDetails => {
             console.log('orderdetails', orderDetails);
-            res.render('user/order', {
-                prod: orderDetails,
-                pageTitle: 'order',
-                path: '/order',
-                data: req.session.userData
-
-            });
+            res.status(200).json({
+                success: true,
+                message: "order succesfull!",
+                data: orderDetails,
+                sessiondata: req.session.userData
+            })  
         })
         .catch(err => {
             console.log(err);
+            res.status(400).json({
+                success: false,
+                message: "order unsuccessfull!"
+            })
         });
 
 }

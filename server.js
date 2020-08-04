@@ -98,8 +98,6 @@ app.use(authRouter);
 app.use(cors());
 
 
-
-
 // mongoose.connect(dbUrl,{useNewUrlParser:true})
 //     .then(result=>{
 //         app.listen(3000, () => {
