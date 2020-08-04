@@ -7,7 +7,7 @@ const multer = require('multer'); //Multer is a node.js middleware for handling 
 // const connect_flash=require('connect-flash');
 const bodyParser=require('body-parser');
 
-const router=require('./router/router');
+const adminRouter=require('./router/adminRouter');
 const userRouter=require('./router/userRouter');
 const authRouter=require('./router/authRouter');
 const mongoose=require('mongoose');
@@ -92,7 +92,7 @@ app.use((req,res,next)=>{
 //     next();
 // })
 
-app.use(router);
+app.use(adminRouter);
 app.use(userRouter);
 app.use(authRouter);
 app.use(cors());

@@ -59,9 +59,6 @@ exports.addProd = async (req, res, next) => {
                 })
         }
     }
-    
-
-
 }
 
 exports.getProd = async (req, res, next) => {
