@@ -111,7 +111,7 @@ exports.login = async (req, res, next) => {
                         const cookieData = {
                             email: loginResult.email,
                             password: password, //if result.password written then bcrypted password will sent, check result value in console
-
+                            usertype: req.session.userData.usertype
                         }
                         res.cookie('cookieData', cookieData);
                         console.log('logged in Successfully!');
@@ -120,7 +120,8 @@ exports.login = async (req, res, next) => {
                         res.status(200).json({
                             success: true,
                             message: "logged in Successfully!",
-                            data: cookieData,
+                            email: cookieData.email,
+                            usertype: cookieData.usertype,
                             jwt: token
                         })
                     }
