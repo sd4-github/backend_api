@@ -1,7 +1,7 @@
 const ProductModel = require('../model/product');
 const mongodb=require('mongodb');
 const ObjectID = mongodb.ObjectID;
-
+const cloudinary = require('cloudinary');
 
 
 //add product
@@ -9,8 +9,7 @@ exports.addProd = async (req, res, next) => {
     const pname = req.body.pname;
     const pvalue = req.body.pvalue;
     const pdesc = req.body.pdesc;
-    const pimage = req.file;
-    const imagePath = pimage.path;
+    const pimage = req.file.path;
 
     if(!pname){
         return res.status(401)
@@ -33,7 +32,7 @@ exports.addProd = async (req, res, next) => {
             message:"product desc is required!"    
         })
     }
-    if (!imagePath){
+    if (!pimage){
         return res.status(401)
         .json({
             success:false,
@@ -41,10 +40,14 @@ exports.addProd = async (req, res, next) => {
         })
     }
     else{
-        const Product = new ProductModel({ pname: pname, pvalue: pvalue, pdesc: pdesc, pimage: imagePath });
+        
+        const imageUpload = await cloudinary.v2.uploader.upload(pimage); 
+        console.log('result:', imageUpload);
+        
+        const Product = new ProductModel({ pname: pname, pvalue: pvalue, pdesc: pdesc, pimage: imageUpload.secure_url });
         console.log(pimage);
         const saveData= await Product.save();
-        if (saveData) {
+        if (saveData && imageUpload) {
             return res.status(200)
             .json({
                 success:true,
@@ -159,11 +162,3 @@ exports.deleteProd= async (req,res,next)=>{
         }
 
 }
-    
-
-
-
-
-
-
-

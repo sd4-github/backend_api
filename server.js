@@ -1,21 +1,21 @@
-const PORT= process.env.PORT||3200;
-const express=require('express');
-const app=express();
-const path=require('path');
+const PORT = process.env.PORT || 3200;
+const express = require('express');
+const app = express();
+const path = require('path');
 const multer = require('multer'); //Multer is a node.js middleware for handling multipart/formdata,which is primarily used for uploading files.
-// const csrf=require('csurf');
-// const connect_flash=require('connect-flash');
-const bodyParser=require('body-parser');
+const cloudinary = require('cloudinary').v2;
 
-const adminRouter=require('./router/adminRouter');
-const userRouter=require('./router/userRouter');
-const authRouter=require('./router/authRouter');
-const mongoose=require('mongoose');
+const bodyParser = require('body-parser');
+
+const adminRouter = require('./router/adminRouter');
+const userRouter = require('./router/userRouter');
+const authRouter = require('./router/authRouter');
+const mongoose = require('mongoose');
 let dbUrl = "mongodb+srv://sd4_mongo:maximum21@cluster0-bz0me.mongodb.net/sd4_mongo?retryWrites=true&w=majority";
 const session = require('express-session');
 const cookie = require('cookie-parser');
-const mongodb_session= require('connect-mongodb-session')(session);
-const authModel= require('./model/authModel');
+const mongodb_session = require('connect-mongodb-session')(session);
+const authModel = require('./model/authModel');
 const cors = require('cors'); //cross origine resource sharing is a mechanism that uses additional http headers to tell browsers to give a webapplication running at one
 //origin, access to selected resourses from a different origin
 
@@ -41,9 +41,9 @@ app.use((req, res, next) => {
 })
 
 
-const fileStorage= multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,'image')
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'image')
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname)
@@ -52,38 +52,44 @@ const fileStorage= multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.includes('png') || file.mimetype.includes('jpg') || file.mimetype.includes('jpeg')) {
-        cb(null,true)
-    }else{
+        cb(null, true)
+    } else {
         cb(null, false)
     }
 }
 
-const sessionStore=mongodb_session({
-    uri:dbUrl,
-    collection:'my_session'
+cloudinary.config({
+    cloud_name: 'sd4-cloudinary',
+    api_key: '325421615568981',
+    api_secret: 'VFQjx6zuW7x9LRcDqkR0g42A-cI'
 })
 
-app.use(session({secret:'my_secret', resave:false, saveUninitialized:false, store:sessionStore}));
+const sessionStore = mongodb_session({
+    uri: dbUrl,
+    collection: 'my_session'
+})
 
-app.use(multer({storage:fileStorage,fileFilter:fileFilter,limits:{fieldSize:1024*1024*5}}).single('pimage')); //image size limit 5mb converted to kb
+app.use(session({ secret: 'my_secret', resave: false, saveUninitialized: false, store: sessionStore }));
+
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter, limits: { fieldSize: 1024 * 1024 * 5 } }).single('pimage')); //image size limit 5mb converted to kb
 
 app.use(cookie());
 // app.use(csrfProtect);
 // app.use(connect_flash());
 
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
     if (!req.session.userData) {
         return next();
     }
     authModel.findById(req.session.userData._id)
-    .then(userValue => {
-        req.userInfo=userValue;
-        console.log(req.userInfo);
-        next();
-    })
-    .catch(err=>{
-        console.log(err);
-    })
+        .then(userValue => {
+            req.userInfo = userValue;
+            console.log(req.userInfo);
+            next();
+        })
+        .catch(err => {
+            console.log(err);
+        })
 });
 
 // app.use((req,res,next)=>{
@@ -109,19 +115,16 @@ app.use(cors());
 //             console.log('not connected');
 //         })
 
-    const connection = (async () => {
-        try {
-            const connected= await mongoose.connect(dbUrl, { useNewUrlParser: true });
+const connection = (async () => {
+    try {
+        const connected = await mongoose.connect(dbUrl, { useNewUrlParser: true });
 
-            if (connected ) {
-                app.listen(PORT, ()=>{
-                    console.log("server is running on PORT:", PORT);
-                })
-            }
-        } catch (err) {
-            console.log('error: ' + err)
+        if (connected) {
+            app.listen(PORT, () => {
+                console.log("server is running on PORT:", PORT);
+            })
         }
-    })();
-
-
-
+    } catch (err) {
+        console.log('error: ' + err)
+    }
+})();
