@@ -1,6 +1,8 @@
 const authModel = require('../model/authModel');
+const passwordResetToken = require('../model/resetToken');
 const mongodb = require('mongodb');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const nodemailer=require('nodemailer');
 const sendgrid=require('nodemailer-sendgrid-transport');
 const {validationResult} = require('express-validator/check');
@@ -9,8 +11,7 @@ const jwt = require('jsonwebtoken');
 
 const transport = nodemailer.createTransport(sendgrid({
     auth:{
-        api_key: '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'
-
+        api_key: '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'
     }
 }))
 
@@ -54,9 +55,9 @@ exports.register = async (req, res, next) => {
                     data: saveResult
                 })
 
-                return await transport.sendMail({
+                return transport.sendMail({
                     to: email,
-                    from: 'soumikd4@gmail.com',
+                    from: 'soumikd4@yahoo.in',
                     subject: 'confirmation mail',
                     html: `hi ${fname} ${lname}, your email is confirmed!`
                 })
@@ -67,7 +68,7 @@ exports.register = async (req, res, next) => {
                 // console.log(err)
                 res.status(400).json({
                     success: false,
-                    message: "email already exists!"
+                    message: "register unsuccessfull!"
                 })
             }
         }
@@ -76,7 +77,7 @@ exports.register = async (req, res, next) => {
         // console.log(err);
         res.status(400).json({
             success: false,
-            message: "email already exists!"
+            message: "register unsuccessfull!"
         })
     }
 
@@ -167,3 +168,120 @@ exports.logout = (req,res,next) => {
         })   
      })
 }
+
+
+exports.ResetPassword = async (req, res) => {
+    if (!req.body.email) {
+        return res
+            .status(500)
+            .json({ message: 'Email is required' });
+    }
+    const user = await authModel.findOne({
+        email: req.body.email
+    });
+    if (!user) {
+        return res
+            .status(409)
+            .json({ message: 'Email does not exist' });
+    }
+    const resettoken = new passwordResetToken({ user_id: user._id, resettoken: crypto.randomBytes(16).toString('hex') });
+    resettoken.save(err => {
+        if (err) { 
+            return res.status(500)({ msg: err.message });
+        }
+        console.log(resettoken);
+        passwordResetToken.find({ user_id: user._id, resettoken: { $ne: resettoken.resettoken } }).remove().exec();
+        res.status(200).json({ message: 'Reset Password successfully.', data: resettoken});
+        // var transporter = nodemailer.createTransport({
+        //     service: 'Gmail',
+        //     port: 465,
+        //     auth: {
+        //         user: 'user',
+        //         pass: 'password'
+        //     }
+        // });
+        // var mailOptions = {
+        //     to: user.email,
+        //     from: 'your email',
+        //     subject: 'Node.js Password Reset',
+        //     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
+        //         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+        //         'http://localhost:4200/response-reset-password/' + resettoken.resettoken + '\n\n' +
+        //         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
+        // }
+        // transporter.sendMail(mailOptions, (err, info) => {
+        // })
+    })
+}
+
+
+exports.ValidPasswordToken = async (req, res)=> {
+    if (!req.body.resettoken) {
+        return res
+            .status(500)
+            .json({ message: 'Token is required' });
+    }
+    const user = await passwordResetToken.findOne({
+        resettoken: req.body.resettoken
+    });
+    if (!user) {
+        return res
+            .status(409)
+            .json({ message: 'Invalid URL' });
+    }
+    authModel.findOneAndUpdate({ _id: user.user_id }).then(() => {
+        res.status(200).json({ message: 'Token verified successfully.' });
+    }).catch((err) => {
+        return res.status(500).send({ msg: err.message });
+    });
+}
+
+ exports.NewPassword= async (req, res) => {
+        passwordResetToken.findOne({ resettoken: req.body.resettoken }, (err, userToken, next) => {
+            if (!userToken) {
+                return res
+                    .status(409)
+                    .json({ message: 'Token has expired', err: err });
+            }
+        
+        authModel.findOne({ _id: userToken.user_id }, (err, userDetails, next) => {
+                if (!userDetails) {
+                    return res
+                        .status(409)
+                        .json({ message: 'User does not exist', err: err });
+                }
+                return bcrypt.hash(req.body.password, 10, (err, hash) => {
+                    if (err) {
+                        return res
+                            .status(400)
+                            .json({ message: 'Error hashing password', err: err } );
+                    }
+                        console.log('userPass:', userDetails.password);
+                        console.log('hashpass:', hash);
+                        userDetails.password=hash;
+                        console.log('updated userDetails:', userDetails.password);
+                    authModel.findOneAndUpdate({_id:userToken.user_id}, {password:userDetails.password}, (err, findResult) => {
+                        if (err) {
+                            return res
+                                .status(400)
+                                .json({ message: 'Password can not reset.',err:err });
+                        } else {        
+                            userToken.remove();   
+                            console.log('oldPass', findResult.password);                        
+                            console.log('newPass', userDetails.password);                        
+                            return res
+                                .status(201)
+                                .json({ message: 'Password reset successfully', newPass: userDetails.password});
+                        }
+
+                    });
+                });
+            });
+
+        })
+    }
+
+
+    
+
+    
