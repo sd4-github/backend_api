@@ -2,7 +2,6 @@ const mongoose=require('mongoose');
 
 const Schema=mongoose.Schema; //Schema is a class of mongoose
 const ProductSchema=new Schema({
-    
     pname:{
         type:String,
         required:true

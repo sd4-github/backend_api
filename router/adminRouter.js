@@ -7,7 +7,7 @@ const jwtAuth = require('../middleware/isAuth');
 adminRouter.post('/addprod',jwtAuth, adminController.addProd);
 adminRouter.get('/getprod',adminController.getProd);
 adminRouter.get('/editprod/:_id', adminController.editProd);
-adminRouter.post('/updateprod',adminController.updateProd);
+adminRouter.post('/updateprod/:_id',adminController.updateProd);
 adminRouter.get('/deleteprod/:_id',adminController.deleteProd);
 
 

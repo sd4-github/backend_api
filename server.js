@@ -27,7 +27,7 @@ const cors = require('cors'); //cross origine resource sharing is a mechanism th
 
 // app.set('view engine','ejs');//initialize ejs
 // app.set('views','views');//initialize in views folder
-// app.use(express.static(path.join(__dirname,'public'))) //public folder statically served
+app.use(express.static(path.join(__dirname,'public'))) //public folder statically served
 app.use('/image', express.static(path.join(__dirname, 'image')))
 
 app.use(bodyParser.urlencoded({ extended: false }));

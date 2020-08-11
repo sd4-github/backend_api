@@ -11,11 +11,9 @@ const jwt = require('jsonwebtoken');
 
 const transport = nodemailer.createTransport(sendgrid({
     auth:{
-        api_key: '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'
+        api_key: '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'
     }
 }))
-
-
 
 exports.register = async (req, res, next) => {
     const fname = req.body.firstname;
@@ -57,7 +55,7 @@ exports.register = async (req, res, next) => {
 
                 return transport.sendMail({
                     to: email,
-                    from: 'soumikd4@yahoo.in',
+                    from: 'soumikd4@gmail.com',
                     subject: 'confirmation mail',
                     html: `hi ${fname} ${lname}, your email is confirmed!`
                 })
