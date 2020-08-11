@@ -112,88 +112,33 @@ exports.editProd = async (req,res,next) => {
 
 }
 
-// exports.updateProd = async (req, res, next) => {
-//     const _id = req.body._id;
-//     const uname = req.body.pname;
-//     const uvalue = req.body.pvalue;
-//     const udesc = req.body.pdesc;
-//     const uimage = req.file;
 
-//     const updateResult = await ProductModel.findById({ _id:'5f2fbd16966b57002482abbe'}) 
-//         try{
-//             console.log('115',updateResult);
-//             console.log('116',result);
-//             updateResult.pname=uname;
-//             updateResult.pvalue=uvalue;
-//             updateResult.pdesc=udesc;
-            
-//             // if (pimage) {
-//             //     const imageUpdate = await cloudinary.v2.uploader.explicit(URL, { type: "fetch", invalidate: true }, result => {
-//             //         console.log(result);
-//             //     });
-//             //     console.log('updatedImage:', imageUpdate);
-//             // }
-//             // if (uimage) {
-//             //     updateResult.pimage = uimage.path;
-//             // }
-
-//             const updatedData = await ProductModel.save();
-//             try{
-//                 return res.status(200).json({
-//                     success: true,
-//                     message: "product succesfully updated",
-//                     data: updatedData
-//                 })
-//             }
-//             catch (err) {
-//                 return res.status(400).json({
-//                     success: false,
-//                     message: "update unsuccessfull!",
-//                     errData: updatedData,
-//                     err:err
-//                 })
-//             }        
-//         }
-//     catch (err) {
-//         return res.status(400).json({
-//             success: false,
-//             message: "update unsuccessfull catch!",
-//             err:err
-//         })
-//     } 
-// }
-
-exports.updateProd = (req, res, next) => {
-    const uname = req.body.pname;
-    const uvalue = req.body.pvalue;
-    const udesc = req.body.pdesc;
-    // const uimage = req.file;
-
-    ProductModel.findById(req.params._id).then((products) => {
-        console.log('165',products);
-        console.log(products._id);
-        products.pname = uname;
-        products.pvalue = uvalue;
-        products.pdesc = udesc;
-        // products.pimage = uimage;
-        // if (uimage) {
-        // }
-    return ProductModel.updateOne(products._id);
-    //  return products.save();
-     }).then((result) => {
-        console.log('updated data' + result);
-        return res.status(201).json({
-            success: true,
-            message: 'product is updated successfully',
-            product_data: result
-        })
-    }).catch((err) => {
-        res.status(400).json({
+exports.updateProd = async (req, res, next) => {
+    const pimage = req.file.path;
+    const imageUpload = await cloudinary.v2.uploader.upload(pimage);
+    console.log('result:', imageUpload);
+    const id = req.params._id;
+    const updates = {
+        body: req.body,
+        pimage: imageUpload.secure_url
+    };
+    const options = { new: true };
+    const updatedData = await ProductModel.findByIdAndUpdate(id,updates,options);
+    console.log(updatedData);
+    try {
+        return res.status(200).json({
+                    success: true,
+                    message: "product succesfully updated",
+                    data: updatedData
+     })
+    } catch (error) {
+        console.log(error.message);
+        return res.status(400).json({
             success: false,
-            message: 'internal server error'
+            message: "update unsuccessfull!",
+            err:error.message
         })
-        console.log(err);
-    })
+    }
 }
 
 exports.deleteProd= async (req,res,next)=>{

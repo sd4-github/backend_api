@@ -4,7 +4,7 @@ let db;
 let dbUrl = "mongodb+srv://sd4_mongo:maximum21@cluster0-bz0me.mongodb.net/sd4_mongo?retryWrites=true&w=majority";
 
 const mongoConnect= (callback)=>{
-    MongoClient.connect(dbUrl,{useUnifiedTopology:true},{useNewUrlparser:true}).then(result=>{
+    MongoClient.connect(dbUrl, { useUnifiedTopology: true }, { useNewUrlparser: true }).then(result=>{
         db = result.db("sd4_mongo");
         console.log('connected!');
         callback();
