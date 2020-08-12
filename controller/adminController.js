@@ -119,7 +119,9 @@ exports.updateProd = async (req, res, next) => {
     console.log('result:', imageUpload);
     const id = req.params._id;
     const updates = {
-        body: req.body,
+        pname: req.body.pname,
+        pvalue: req.body.pvalue,
+        pdesc: req.body.pdesc,
         pimage: imageUpload.secure_url
     };
     const options = { new: true };
