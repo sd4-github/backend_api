@@ -106,11 +106,31 @@ exports.addToCart = (req, res, next) => {
             const pvalue = result.pvalue;
             const pimage = result.pimage
 
-
             CartModel.find({ user_id: user_id, p_id: p_id })
                 //cartvalue is array
                 .then(cartvalue => {
                     console.log(cartvalue);
+                    if (cartvalue[0]!=null && p_id===cartvalue[0].p_id) {
+                        cartvalue[0].quantity++;
+                        cartvalue[0].save()
+                            .then(addCartResult => {
+                                console.log('product quantity updated to cart!')
+                                res.status(200).json({
+                                    success: true,
+                                    message: "product quantity updated to cart!",
+                                    data: addCartResult,
+                                    sessiondata: req.session.userData
+                                })
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                res.status(400).json({
+                                    success: false,
+                                    message: "cart add unsuccessfull!"
+                                })
+                            })
+
+                    } else {              
                     let cartproduct = cartvalue[0];
                     const Cart = new CartModel({ user_id: user_id, p_id: p_id, quantity: quantity, pname: pname, pvalue: pvalue, pimage: pimage })
 
@@ -131,8 +151,8 @@ exports.addToCart = (req, res, next) => {
                                 message: "cart add unsuccessfull!"
                             })
                         })
+                    }
                 })
-
                 .catch(err => {
                     console.log(err);
                     res.status(400).json({
@@ -148,6 +168,7 @@ exports.addToCart = (req, res, next) => {
                 message: "cart add unsuccessfull!"
             })
         })
+
 }
 
 exports.updateCart = (req, res, next) => {

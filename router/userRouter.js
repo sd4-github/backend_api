@@ -9,7 +9,7 @@ router.get('/showprod', userController.showProd);
 router.get('/searchprod', userController.searchProd);
 router.get('/detailsprod/:_id',userController.detailsProd);
 router.get('/addtocart', userController.showCart);
-router.post('/addtocart',auth,userController.addToCart);
+router.post('/addtocart',userController.addToCart);
 router.post('/updatecart',userController.updateCart);
 router.get('/deletecartprod/:p_id', userController.deleteCartProd);
 router.get('/getcheckout',userController.getCheckout);
