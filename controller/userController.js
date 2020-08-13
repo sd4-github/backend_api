@@ -76,12 +76,6 @@ exports.showCart = (req, res, next) => {
     CartModel.find({ user_id: user_id })
         .then(showcartresult => {
             console.log(showcartresult);
-            // res.render('user/cart', {
-            //     prod: showcartresult,
-            //     pageTitle: 'cart',
-            //     path: '/addtocart',
-            //     data: req.session.userData
-            // })
             res.status(200).json({
                 success: true,
                 message: "cart details",
@@ -101,7 +95,7 @@ exports.showCart = (req, res, next) => {
 
 
 exports.addToCart = (req, res, next) => {
-    const p_id = req.body.p_id;
+    const p_id = req.body._id;
     const quantity = req.body.quantity;
     const user_id = req.session.userData._id;
 
@@ -118,8 +112,6 @@ exports.addToCart = (req, res, next) => {
                 .then(cartvalue => {
                     console.log(cartvalue);
                     let cartproduct = cartvalue[0];
-                    //insert item
-                    // if (!cartvalue) {
                     const Cart = new CartModel({ user_id: user_id, p_id: p_id, quantity: quantity, pname: pname, pvalue: pvalue, pimage: pimage })
 
                     Cart.save()
@@ -139,22 +131,6 @@ exports.addToCart = (req, res, next) => {
                                 message: "cart add unsuccessfull!"
                             })
                         })
-                    // }
-                    // else{
-                    //     cartproduct.quantity=quantity;
-
-                    //     //update item   
-                    //     cartproduct.save()
-                    //         .then(updateResult => {
-                    //             console.log('product added to cart!')
-                    //             res.redirect('/addtocart');
-                    //         })
-                    //         .catch(err => {
-                    //             console.log(err);
-                    //         })
-                    // }
-
-
                 })
 
                 .catch(err => {
@@ -164,7 +140,6 @@ exports.addToCart = (req, res, next) => {
                         message: "cart add unsuccessfull!"
                     })
                 })
-
         })
         .catch(err => {
             console.log(err);
