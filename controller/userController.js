@@ -26,7 +26,7 @@ exports.showProd = (req, res, next) => {
 exports.searchProd = (req, res, next) => {
     const q = req.query.search;
 
-    ProductModel.find({ pname: q }).sort({ pname: 1 })
+    ProductModel.find({ pname: { $regex: q, $options: 'i'} }).sort({ pname: 1 })
         .then(searchResult => {
             if (q) {
                 res.status(200).json({
