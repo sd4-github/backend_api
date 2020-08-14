@@ -124,7 +124,7 @@ exports.login = async (req, res, next) => {
                             user_id: cookieData.user_id,
                             email: cookieData.email,
                             usertype: cookieData.usertype,
-                            jwt: token
+                            token: token
                         })
                     }
                     else {
