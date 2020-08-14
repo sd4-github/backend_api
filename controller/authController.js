@@ -101,24 +101,31 @@ exports.login = async (req, res, next) => {
             if (data) {
                 req.session.isLoggedin = true;  //here we have created session variable within that we have to store loggedin , userdata
                 console.log(req.session.isLoggedin);
+                console.log('loginResult',loginResult);
                 req.session.userData = loginResult;
-                console.log(req.session.userData);
+                console.log('sessiondata:',req.session.userData);
 
                 return req.session.save(err => {     
 
                     if (checkbox) {
                         const cookieData = {
-                            email: loginResult.email,
+                            user_id: req.session.userData._id,
+                            email: req.session.userData.email,
                             password: password, //if result.password written then bcrypted password will sent, check result value in console
-                            usertype: req.session.userData.usertype
+                            firstname: req.session.userData.firstname,
+                            lastname: req.session.userData.lastname,
+                            usertype: req.session.userData.usertype,
                         }
                         res.cookie('cookieData', cookieData);
-                        console.log('logged in Successfully!');
+                        console.log('logged in Successfully!',cookieData);
 
                         const token = jwt.sign({ email: loginResult.email}, "SECRETPASS", { expiresIn: "1h"})
                         res.status(200).json({
                             success: true,
                             message: "logged in Successfully!",
+                            user_id: cookieData.user_id,
+                            firstname:cookieData.firstname,
+                            lastname: cookieData.lastname,
                             email: cookieData.email,
                             usertype: cookieData.usertype,
                             jwt: token
