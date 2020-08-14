@@ -110,10 +110,8 @@ exports.login = async (req, res, next) => {
                     if (checkbox) {
                         const cookieData = {
                             user_id: req.session.userData._id,
-                            email: req.session.userData.email,
+                            email: loginResult.email,
                             password: password, //if result.password written then bcrypted password will sent, check result value in console
-                            firstname: req.session.userData.firstname,
-                            lastname: req.session.userData.lastname,
                             usertype: req.session.userData.usertype,
                         }
                         res.cookie('cookieData', cookieData);
@@ -124,8 +122,6 @@ exports.login = async (req, res, next) => {
                             success: true,
                             message: "logged in Successfully!",
                             user_id: cookieData.user_id,
-                            firstname:cookieData.firstname,
-                            lastname: cookieData.lastname,
                             email: cookieData.email,
                             usertype: cookieData.usertype,
                             jwt: token
