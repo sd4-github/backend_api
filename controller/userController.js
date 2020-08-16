@@ -70,18 +70,18 @@ exports.detailsProd = (req, res, next) => {
 }
 
 exports.showCart = (req, res, next) => {
-    //const user_id = req.session.userData._id;
+    // const user_id = req.session.userData._id;
     // console.log(user_id);
-	const user_id=req.params.user_id;
+    const user_id=req.query.user_id;
+    console.log('reqParamId:',user_id);
 
-    CartModel.find({ user_id: user_id })
+    CartModel.find({user_id:user_id})
         .then(showcartresult => {
-            console.log(showcartresult);
+            console.log('data:',showcartresult);
             res.status(200).json({
                 success: true,
                 message: "cart details",
-                data: showcartresult,
-                sessiondata: req.session.userData
+                data: showcartresult
             })
         })
         .catch(err => {
@@ -96,9 +96,12 @@ exports.showCart = (req, res, next) => {
 
 
 exports.addToCart = (req, res, next) => {
-    const p_id = req.body._id;
+    const p_id = req.body.p_id;
     const quantity = req.body.quantity;
-    const user_id = req.session.userData._id;
+    const user_id = req.body.user_id;
+    // const pname = req.body.pname;
+    // const pvalue =req.body.pvalue;
+    // const pimage =req.body.pimage;
 
     ProductModel.findById(p_id)
         .then(result => {
