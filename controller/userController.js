@@ -72,7 +72,8 @@ exports.detailsProd = (req, res, next) => {
 exports.showCart = (req, res, next) => {
     // const user_id = req.session.userData._id;
     // console.log(user_id);
-    const user_id=req.query.user_id;
+    //const user_id=req.query.user_id;
+    const user_id=req.params.user_id;
     console.log('reqParamId:',user_id);
 
     CartModel.find({user_id:user_id})
