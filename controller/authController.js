@@ -55,7 +55,7 @@ exports.register = async (req, res, next) => {
 
                 return transport.sendMail({
                     to: email,
-                    from: 'soumikd4@gmail.com',
+                    from: 'soumikd4@yahoo.in',
                     subject: 'confirmation mail',
                     html: `hi ${fname} ${lname}, your email is confirmed!`
                 })
