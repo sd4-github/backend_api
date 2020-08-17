@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken');
 
 const transport = nodemailer.createTransport(sendgrid({
     auth:{
-        api_key: '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'
+        api_key: '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'
     }
 }))
 
