@@ -14,7 +14,7 @@ router.post('/updatecart',userController.updateCart);
 router.get('/deletecartprod/:p_id', userController.deleteCartProd);
 router.get('/getcheckout/:user_id',userController.getCheckout);
 router.post('/postcheckout',userController.postCheckout);
-router.get('/order',userController.order);
+router.get('/order/:user_id',userController.order);
 
 
 

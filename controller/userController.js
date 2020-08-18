@@ -332,7 +332,7 @@ exports.postCheckout = (req, res, next) => {
 
 exports.order = (req, res, next) => {
 
-    const user_id = req.session.userData._id;
+    const user_id = req.params.user_id;
 
     OrderModel.find({ user_id: user_id })
         .then(orderDetails => {
