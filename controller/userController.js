@@ -263,7 +263,7 @@ exports.getCheckout = (req, res, next) => {
 }
 
 exports.postCheckout = (req, res, next) => {
-    const user_id = req.session.userData._id;
+    const user_id = req.body.user_id;
     const name = req.body.name;
     const email = req.body.email;
     const mobilenum = req.body.mobilenum;
