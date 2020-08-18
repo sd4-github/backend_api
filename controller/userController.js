@@ -336,11 +336,11 @@ exports.order = (req, res, next) => {
 
     OrderModel.find({ user_id: user_id })
         .then(orderDetails => {
-            console.log('orderdetails', orderDetails);
+            console.log('orderdetails', orderDetails[orderDetails.length -1]);
             res.status(200).json({
                 success: true,
                 message: "order succesfull!",
-                data: orderDetails,
+                data: orderDetails[orderDetails.length - 1],
                 sessiondata: req.session.userData
             })  
         })
