@@ -240,7 +240,7 @@ exports.deleteCartProd = (req, res, next) => {
 
 exports.getCheckout = (req, res, next) => {
 
-    const user_id = req.session.userData._id;
+    const user_id = req.params.user_id;
 
     CartModel.find({ user_id: user_id })
         .then(cartItem => {

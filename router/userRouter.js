@@ -12,7 +12,7 @@ router.get('/showcart/:user_id', userController.showCart);
 router.post('/addtocart',userController.addToCart);
 router.post('/updatecart',userController.updateCart);
 router.get('/deletecartprod/:p_id', userController.deleteCartProd);
-router.get('/getcheckout',userController.getCheckout);
+router.get('/getcheckout/:user_id',userController.getCheckout);
 router.post('/postcheckout',userController.postCheckout);
 router.get('/order',userController.order);
 
