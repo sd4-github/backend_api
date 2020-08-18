@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
 
+
 const OrderSchema=new Schema({
     name:{
         type: String,
@@ -29,7 +30,8 @@ const OrderSchema=new Schema({
     orderproduct: {
         type: Array,
         required: true
-    }
+    },
+    date: { type: Date, default: Date.now }
 })
 
 module.exports = mongoose.model('OrderModel', OrderSchema);
