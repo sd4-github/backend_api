@@ -166,7 +166,7 @@ exports.deleteProd= async (req,res,next)=>{
 
 exports.getUser = async (req, res, next) => {
     
-    const userlist = await authModel.find()           //find predefined function which is used to collect all data
+    const userlist = await authModel.find({usertype:"user"})           //find predefined function which is used to collect all data
  
     try {
         res.status(200).json({
