@@ -4,7 +4,7 @@ const adminController=require('../controller/adminController');
 const jwtAuth = require('../middleware/isAuth');
 
 
-adminRouter.post('/addprod',jwtAuth, adminController.addProd);
+adminRouter.post('/addprod', adminController.addProd);
 adminRouter.get('/getprod',adminController.getProd);
 adminRouter.get('/editprod/:_id', adminController.editProd);
 adminRouter.patch('/updateprod/:_id',adminController.updateProd);
