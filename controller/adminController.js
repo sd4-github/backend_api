@@ -164,6 +164,25 @@ exports.deleteProd= async (req,res,next)=>{
 
 }
 
+exports.getUser = async (req, res, next) => {
+    
+    const userlist = await authModel.find()           //find predefined function which is used to collect all data
+ 
+    try {
+        res.status(200).json({
+            success: true,
+            message: "users fetched",
+            data: userlist
+        })
+    } 
+    catch (error) {
+        res.status(400).json({
+            success: false,
+            message: "product fecth failed"
+        })
+    } 
+
+}
 
 exports.deleteUser= async (req,res,next)=>{
     const user_id = req.params._id;
