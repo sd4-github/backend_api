@@ -9,6 +9,7 @@ adminRouter.get('/getprod',adminController.getProd);
 adminRouter.get('/editprod/:_id', adminController.editProd);
 adminRouter.patch('/updateprod/:_id',adminController.updateProd);
 adminRouter.get('/deleteprod/:_id',adminController.deleteProd);
+adminRouter.get('/deleteuser/:_id',adminController.deleteUser);
 
 
 

@@ -3,6 +3,7 @@ const mongodb=require('mongodb');
 const ObjectId = mongodb.ObjectId;
 const cloudinary = require('cloudinary');
 const product = require('../model/product');
+const authModel = require('../model/authModel');
 
 
 //add product
@@ -149,14 +150,38 @@ exports.deleteProd= async (req,res,next)=>{
         try {
             res.status(201).json({
                 success:true,
-                message:"product succesfully deleted"
+                message:"product succesfully deleted",
+                data: deleteResult
             })
         }
         catch(err) {
             res.status(400).json({
                 success: false,
-                message: "delete unsuccessfull!"
+                message: "delete unsuccessfull!",
+                data: deleteResult
             })
         }
 
 }
+
+
+exports.deleteUser= async (req,res,next)=>{
+    const user_id = req.params._id;
+    const deleteResult= await authModel.deleteOne({ _id:user_id})
+        try {
+            res.status(201).json({
+                success:true,
+                message:"user succesfully removed",
+                data: deleteResult
+            })
+        }
+        catch(err) {
+            res.status(400).json({
+                success: false,
+                message: "remove unsuccessfull!",
+                data: deleteResult
+            })
+        }
+}
+
+
