@@ -18,6 +18,11 @@ const mongodb_session = require('connect-mongodb-session')(session);
 const authModel = require('./model/authModel');
 const cors = require('cors'); //cross origine resource sharing is a mechanism that uses additional http headers to tell browsers to give a webapplication running at one
 //origin, access to selected resourses from a different origin
+const corsOptions ={
+    origin:'http://localhost:3000', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
 
 
 
@@ -101,8 +106,7 @@ app.use((req, res, next) => {
 app.use(adminRouter);
 app.use(userRouter);
 app.use(authRouter);
-app.use(cors());
-
+app.use(cors(corsOptions));
 
 // mongoose.connect(dbUrl,{useNewUrlParser:true})
 //     .then(result=>{
