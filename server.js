@@ -11,7 +11,7 @@ const adminRouter = require('./router/adminRouter');
 const userRouter = require('./router/userRouter');
 const authRouter = require('./router/authRouter');
 const mongoose = require('mongoose');
-let dbUrl = "mongodb+srv://sd4_mongo:maximum21@cluster0-bz0me.mongodb.net/sd4_mongo?retryWrites=true&w=majority";
+let dbUrl = "mongodb+srv://sd4_mongo:maximum21@cluster0.tm4btmo.mongodb.net/?retryWrites=true&w=majority";
 const session = require('express-session');
 const cookie = require('cookie-parser');
 const mongodb_session = require('connect-mongodb-session')(session);
