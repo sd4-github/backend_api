@@ -19,7 +19,7 @@ const authModel = require('./model/authModel');
 const cors = require('cors'); //cross origine resource sharing is a mechanism that uses additional http headers to tell browsers to give a webapplication running at one
 //origin, access to selected resourses from a different origin
 const corsOptions ={
-    origin:'http://localhost:3200', 
+    origin: ['http://localhost:3200', 'https://mycart-backend.onrender.com'], 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
