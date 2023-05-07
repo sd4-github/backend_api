@@ -7,7 +7,7 @@ let dbUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}
 
 const mongoConnect= (callback)=>{
     MongoClient.connect(dbUrl, { useUnifiedTopology: true }, { useNewUrlparser: true }).then(result=>{
-        db = result.db("sd4_mongo");
+        db = result.db(`${process.env.DB_USERNAME}`);
         console.log('connected!');
         callback();
     }).catch(err=>{
