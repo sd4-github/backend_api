@@ -3,7 +3,6 @@ const MongoClient=mongodb.MongoClient;
 let db;
 const dotenv = require("dotenv");
 dotenv.config();
-console.log(process.env);
 let dbUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.tm4btmo.mongodb.net/?retryWrites=true&w=majority`;
 
 const mongoConnect= (callback)=>{
