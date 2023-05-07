@@ -1,0 +1,61 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "mycart_rest_collection",
+    "dateExported": "2023-05-07T14:49:04.145Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "225357b0-f60b-4626-8945-e5681e88eb69",
+            "colId": "7249b802-1dad-473f-b5c1-e1838991880b",
+            "containerId": "",
+            "name": "signup",
+            "url": "https://mycart-backend.onrender.com/register",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-05-07T10:45:05.642Z",
+            "modified": "2023-05-07T10:59:33.743Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"firstname\": \"soumik\",\n  \"lastname\": \"dhar\",\n  \"email\": \"soumikd4@gmail.com\",\n  \"password\": \"soumikd4\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2485cfe3-41c1-449d-9c15-fac390d848d9",
+            "colId": "7249b802-1dad-473f-b5c1-e1838991880b",
+            "containerId": "",
+            "name": "login",
+            "url": "https://mycart-backend.onrender.com/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-05-07T10:50:52.373Z",
+            "modified": "2023-05-07T10:58:07.755Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"soumikd4@gmail.com\",\n  \"password\": \"soumikd4\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "9cdac031-e8e7-49d9-94f2-bb6d8bd014db",
+            "colId": "7249b802-1dad-473f-b5c1-e1838991880b",
+            "containerId": "",
+            "name": "getuser",
+            "url": "https://mycart-backend.onrender.com/getuser",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-05-07T10:56:49.451Z",
+            "modified": "2023-05-07T10:57:18.368Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}

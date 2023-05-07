@@ -20,7 +20,7 @@ const mongodb_session = require('connect-mongodb-session')(session);
 const authModel = require('./model/authModel');
 const cors = require('cors');
 const corsOptions ={
-    origin: ['http://localhost:3200', 'https://mycart-backend.onrender.com', 'https://rich-gold-crown.cyclic.app'], 
+    origin: ['http://localhost:3200', 'https://mycart-backend.onrender.com', 'https://jittery-boa-tweed-jacket.cyclic.app'], 
     credentials:true,
     optionSuccessStatus:200
 }
@@ -109,4 +109,4 @@ const connection = (async () => {
     } catch (err) {
         console.log('error: ' + err)
     }
-})();
+})
