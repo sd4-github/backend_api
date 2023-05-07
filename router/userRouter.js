@@ -3,8 +3,6 @@ const router = express.Router();
 const userController = require('../controller/userController');
 const auth = require('../middleware/isAuth');
 
-
-
 router.get('/showprod', userController.showProd);
 router.get('/searchprod', userController.searchProd);
 router.get('/detailsprod/:_id',userController.detailsProd);
@@ -15,8 +13,5 @@ router.get('/deletecartprod/:p_id', userController.deleteCartProd);
 router.get('/getcheckout/:user_id',userController.getCheckout);
 router.post('/postcheckout',userController.postCheckout);
 router.get('/order/:user_id',userController.order);
-
-
-
 
 module.exports=router;

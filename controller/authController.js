@@ -193,25 +193,6 @@ exports.ResetPassword = async (req, res) => {
         console.log(resettoken);
         passwordResetToken.find({ user_id: user._id, resettoken: { $ne: resettoken.resettoken } }).remove().exec();
         res.status(200).json({ message: 'Reset Password successfully.', data: resettoken});
-        // var transporter = nodemailer.createTransport({
-        //     service: 'Gmail',
-        //     port: 465,
-        //     auth: {
-        //         user: 'user',
-        //         pass: 'password'
-        //     }
-        // });
-        // var mailOptions = {
-        //     to: user.email,
-        //     from: 'your email',
-        //     subject: 'Node.js Password Reset',
-        //     text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-        //         'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        //         'http://localhost:4200/response-reset-password/' + resettoken.resettoken + '\n\n' +
-        //         'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-        // }
-        // transporter.sendMail(mailOptions, (err, info) => {
-        // })
     })
 }
 

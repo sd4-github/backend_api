@@ -10,9 +10,8 @@ const jwt = require('jsonwebtoken');
             throw error;
         }
 
-        // const token = authHeader.split(' ')[1]; //its use for bearer
         const token = authHeader.split()[0];
-        // console.log(token);
+
         let decodeToken;
 
         try {

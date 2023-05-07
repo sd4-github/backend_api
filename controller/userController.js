@@ -70,9 +70,6 @@ exports.detailsProd = (req, res, next) => {
 }
 
 exports.showCart = (req, res, next) => {
-    // const user_id = req.session.userData._id;
-    // console.log(user_id);
-    //const user_id=req.query.user_id;
     const user_id=req.params.user_id;
     console.log('reqParamId:',user_id);
 
@@ -100,19 +97,14 @@ exports.addToCart = (req, res, next) => {
     const p_id = req.body.p_id;
     const quantity = req.body.quantity;
     const user_id = req.body.user_id;
-    // const pname = req.body.pname;
-    // const pvalue =req.body.pvalue;
-    // const pimage =req.body.pimage;
 
     ProductModel.findById(p_id)
         .then(result => {
-            // console.log(result);
             const pname = result.pname;
             const pvalue = result.pvalue;
             const pimage = result.pimage
 
             CartModel.find({ user_id: user_id, p_id: p_id })
-                //cartvalue is array
                 .then(cartvalue => {
                     console.log(cartvalue);
                     if (cartvalue[0]!=null && p_id===cartvalue[0].p_id) {
@@ -182,7 +174,6 @@ exports.updateCart = (req, res, next) => {
     const user_id = req.session.userData._id;
 
     CartModel.find({ user_id: user_id, p_id: p_id })
-        //cartvalue is array
         .then(cartvalue => {
             console.log(cartvalue);
             let cartproduct = cartvalue[0];
@@ -300,7 +291,6 @@ exports.postCheckout = (req, res, next) => {
 
                             .then(postDeleteResult => {
                                 console.log('cart clear!', postDeleteResult)
-                                    // res.redirect('/order');
                             })
                             .catch(err => {
                                 console.log(err);

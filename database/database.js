@@ -1,7 +1,10 @@
 const mongodb=require('mongodb');
 const MongoClient=mongodb.MongoClient;
 let db;
-let dbUrl = "mongodb+srv://sd4_mongo:maximum21@cluster0-bz0me.mongodb.net/sd4_mongo?retryWrites=true&w=majority";
+const dotenv = require("dotenv");
+dotenv.config();
+console.log(process.env);
+let dbUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.tm4btmo.mongodb.net/?retryWrites=true&w=majority`;
 
 const mongoConnect= (callback)=>{
     MongoClient.connect(dbUrl, { useUnifiedTopology: true }, { useNewUrlparser: true }).then(result=>{

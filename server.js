@@ -2,7 +2,7 @@ const PORT = process.env.PORT || 3200;
 const express = require('express');
 const app = express();
 const path = require('path');
-const multer = require('multer'); //Multer is a node.js middleware for handling multipart/formdata,which is primarily used for uploading files.
+const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 
 const bodyParser = require('body-parser');
@@ -11,28 +11,22 @@ const adminRouter = require('./router/adminRouter');
 const userRouter = require('./router/userRouter');
 const authRouter = require('./router/authRouter');
 const mongoose = require('mongoose');
-let dbUrl = "mongodb+srv://sd4_mongo:maximum21@cluster0.tm4btmo.mongodb.net/?retryWrites=true&w=majority";
+const dotenv = require("dotenv");
+dotenv.config();
+let dbUrl = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.tm4btmo.mongodb.net/?retryWrites=true&w=majority`;
 const session = require('express-session');
 const cookie = require('cookie-parser');
 const mongodb_session = require('connect-mongodb-session')(session);
 const authModel = require('./model/authModel');
-const cors = require('cors'); //cross origine resource sharing is a mechanism that uses additional http headers to tell browsers to give a webapplication running at one
-//origin, access to selected resourses from a different origin
+const cors = require('cors');
 const corsOptions ={
     origin: ['http://localhost:3200', 'https://mycart-backend.onrender.com'], 
-    credentials:true,            //access-control-allow-credentials:true
+    credentials:true,
     optionSuccessStatus:200
 }
 
 
-
-// const { userInfo } = require('os');
-
-// const csrfProtect=csrf();
-
-// app.set('view engine','ejs');//initialize ejs
-// app.set('views','views');//initialize in views folder
-app.use(express.static(path.join(__dirname,'public'))) //public folder statically served
+app.use(express.static(path.join(__dirname,'public')))
 app.use('/image', express.static(path.join(__dirname, 'image')))
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -80,8 +74,6 @@ app.use(session({ secret: 'my_secret', resave: false, saveUninitialized: false, 
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter, limits: { fieldSize: 1024 * 1024 * 5 } }).single('pimage')); //image size limit 5mb converted to kb
 
 app.use(cookie());
-// app.use(csrfProtect);
-// app.use(connect_flash());
 
 app.use((req, res, next) => {
     if (!req.session.userData) {
@@ -98,27 +90,12 @@ app.use((req, res, next) => {
         })
 });
 
-// app.use((req,res,next)=>{
-//     res.locals.isAuthenticated=req.session.isLoggedin;
-//     res.locals.csrfToken=req.csrfToken();
-//     next();
-// })
 
 app.use(adminRouter);
 app.use(userRouter);
 app.use(authRouter);
 app.use(cors(corsOptions));
 
-// mongoose.connect(dbUrl,{useNewUrlParser:true})
-//     .then(result=>{
-//         app.listen(3000, () => {
-//             console.log('server is running');
-//         })
-//     })
-//     .catch(
-//         err => {
-//             console.log('not connected');
-//         })
 
 const connection = (async () => {
     try {
